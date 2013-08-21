@@ -83,8 +83,6 @@ echo "       Building Play! application at directory $APP_DIR"
 
 DEPENDENCIES_CMD="$PLAY_PATH/play dependencies $APP_DIR --forProd --forceCopy --silent -Duser.home=$BUILD_DIR 2>&1"
 echo "       Resolving dependencies: $DEPENDENCIES_CMD"
-ls -la
-ls -la .play
 eval "$DEPENDENCIES_CMD" | sed -u 's/^/       /'
 check_compile_status
 
