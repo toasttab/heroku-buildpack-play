@@ -27,12 +27,13 @@ install_play()
   #PLAY_URL="https://s3.amazonaws.com/heroku-jvm-langpack-play/play-heroku-$VER_TO_INSTALL.tar.gz"
   PLAY_URL="https://s3.amazonaws.com/toasttab/static-content/heroku/play-$VER_TO_INSTALL.tar.gz"
   PLAY_TAR_FILE="play-heroku.tar.gz"
-  echo "-----> Installing Play! $VER_TO_INSTALL....."
+  echo "-----> Downloading Play! $VER_TO_INSTALL from $PLAY_URL....."
   curl --silent --max-time 150 --location $PLAY_URL -o $PLAY_TAR_FILE
   if [ ! -f $PLAY_TAR_FILE ]; then
     echo "-----> Error downloading Play! framework. Please try again..."
     exit 1
   fi
+  echo "-----> Checking downloaded Play! build....."
   if [ -z "`file $PLAY_TAR_FILE | grep gzip`" ]; then
     echo "-----> Error installing Play! framework or unsupported Play! framework version specified. Please review Dev Center for a list of supported versions."
     exit 1
