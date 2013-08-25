@@ -73,6 +73,9 @@ fi
 curl --silent --max-time 10 --location $PLAY_SETTINGS_URL --create-dirs --output .ivy2/ivysettings.xml
 echo " done"
 
+ls -la
+ls -la .play
+
 # Build app
 echo "-----> Building Play! application..."
 $PLAY_PATH/play version | sed -u 's/^/       /'
