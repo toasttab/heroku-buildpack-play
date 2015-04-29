@@ -84,6 +84,11 @@ $PLAY_PATH/play version | sed -u 's/^/       /'
 APP_DIR=./
 echo "       Building Play! application at directory $APP_DIR"
 
+echo "       Removing local and artifactory maven repository..."
+sed '/########REMOVED FROM BUILDPACK START/,/########REMOVED FROM BUILDPACK END/d' ${APP_DIR}conf/dependencies.yml > ${APP_DIR}conf/dependencies.yml.tmp && mv ${APP_DIR}conf/dependencies.yml.tmp ${APP_DIR}conf/dependencies.yml
+echo "       Done. This is the final dependencies.yml"
+cat ${APP_DIR}conf/dependencies.yml
+
 DEPENDENCIES_CMD="$PLAY_PATH/play dependencies $APP_DIR --forProd --forceCopy --silent -Duser.home=$BUILD_DIR 2>&1"
 echo "       Resolving dependencies: $DEPENDENCIES_CMD"
 eval "$DEPENDENCIES_CMD" | sed -u 's/^/       /'
