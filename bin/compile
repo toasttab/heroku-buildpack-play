@@ -24,6 +24,8 @@ fi
 # install JDK 
 javaVersion=$(detect_java_version ${BUILD_DIR})
 echo -n "-----> Installing OpenJDK ${javaVersion}..."
+JDK_URL_1_7="http://lang-jvm.s3.amazonaws.com/jdk/openjdk1.7.0_79-cedar14.tar.gz"
+export JDK_URL_1_7
 install_java ${BUILD_DIR} ${javaVersion}
 jdk_overlay ${BUILD_DIR}
 echo "done"
