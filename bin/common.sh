@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-get_play_version()
-{
-  local file=${1?"No file specified"}
-
-  if [ ! -f $file ]; then
-    return 0
-  fi
-
-  grep -P '.*-.*play[ \t]+[0-9\.]' ${file} | sed -E -e 's/[ \t]*-[ \t]*play[ \t]+([0-9A-Za-z\.-]*).*/\1/'    
-}
+#get_play_version()
+#{
+#  local file=${1?"No file specified"}
+#
+#  if [ ! -f $file ]; then
+#    return 0
+#  fi
+#
+#  grep -P '.*-.*play[ \t]+[0-9\.]' ${file} | sed -E -e 's/[ \t]*-[ \t]*play[ \t]+([0-9A-Za-z\.-]*).*/\1/'    
+#}
 
 check_compile_status()
 {
@@ -21,25 +21,25 @@ check_compile_status()
   fi
 }
 
-install_play()
-{
-  VER_TO_INSTALL=$1
-  #PLAY_URL="https://s3.amazonaws.com/heroku-jvm-langpack-play/play-heroku-$VER_TO_INSTALL.tar.gz"
-  PLAY_URL="https://s3.amazonaws.com/toasttab/static-content/heroku/play-$VER_TO_INSTALL.tar.gz"
-  PLAY_TAR_FILE="play-heroku.tar.gz"
-  echo "-----> Downloading Play! $VER_TO_INSTALL from $PLAY_URL....."
-  curl --silent --max-time 150 --location $PLAY_URL -o $PLAY_TAR_FILE
-  if [ ! -f $PLAY_TAR_FILE ]; then
-    echo "-----> Error downloading Play! framework. Please try again..."
-    exit 1
-  fi
-  echo "-----> Checking downloaded Play! build....."
-  if [ -z "`file $PLAY_TAR_FILE | grep gzip`" ]; then
-    echo "-----> Error installing Play! framework or unsupported Play! framework version specified. Please review Dev Center for a list of supported versions."
-    exit 1
-  fi
-  tar xzf $PLAY_TAR_FILE
-  rm $PLAY_TAR_FILE
-  chmod +x $PLAY_PATH/play
-  echo "-----> done"
-}
+#install_play()
+#{
+#  VER_TO_INSTALL=$1
+#  #PLAY_URL="https://s3.amazonaws.com/heroku-jvm-langpack-play/play-heroku-$VER_TO_INSTALL.tar.gz"
+#  PLAY_URL="https://s3.amazonaws.com/toasttab/static-content/heroku/play-$VER_TO_INSTALL.tar.gz"
+#  PLAY_TAR_FILE="play-heroku.tar.gz"
+#  echo "-----> Downloading Play! $VER_TO_INSTALL from $PLAY_URL....."
+#  curl --silent --max-time 150 --location $PLAY_URL -o $PLAY_TAR_FILE
+#  if [ ! -f $PLAY_TAR_FILE ]; then
+#    echo "-----> Error downloading Play! framework. Please try again..."
+#    exit 1
+#  fi
+#  echo "-----> Checking downloaded Play! build....."
+#  if [ -z "`file $PLAY_TAR_FILE | grep gzip`" ]; then
+#    echo "-----> Error installing Play! framework or unsupported Play! framework version specified. Please review Dev Center for a list of supported versions."
+#    exit 1
+#  fi
+#  tar xzf $PLAY_TAR_FILE
+#  rm $PLAY_TAR_FILE
+#  chmod +x $PLAY_PATH/play
+#  echo "-----> done"
+#}
