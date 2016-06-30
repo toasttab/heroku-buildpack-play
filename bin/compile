@@ -36,6 +36,10 @@ IVY_PATH=".ivy2"
 # Change dir to handle relative paths
 cd $BUILD_DIR
 
+TOASTWEB_PRECOMPILED_URL=http://s3.amazonaws.com/toastweb-binaries-stage/160630-172943-jenkins-toastweb-master-64/toastweb.tar.gz
+echo -n "-----> Downloading pre-built toastweb from: ${TOASTWEB_PRECOMPILED_URL}..."
+$BIN_DIR/s3curl.pl --id=AKIAI3ZHTR35FXCK6EUQ --key=yXephQdW3pFL99bcz4zNOWgOk/QYCzjJgz/vrFFv -- $TOASTWEB_PRECOMPILED_URL | tar xz
+
 PROFILE_PATH="$BUILD_DIR/.profile.d/play.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
