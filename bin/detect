@@ -3,8 +3,10 @@
 
 BUILD_DIR=$1
 
-if [ -f "$BUILD_DIR/toastweb_precompiled_url" ]; then
-  echo "Toast Play! Precompiled" && exit 0
+play_confs=$(cd $BUILD_DIR; find . -wholename "*/conf/application.conf" ! -wholename "*modules*" -type f)
+
+if [ -n "$play_confs" ] && [ ! -f "$BUILD_DIR/project/Build.scala" ]; then
+  echo "Play!" && exit 0
 else
   echo "no" && exit 1
 fi
