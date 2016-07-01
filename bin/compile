@@ -17,6 +17,17 @@ curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
 
+# download the precompiled toastweb and extract
+cd $BUILD_DIR
+s3_bucket=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_BUCKET)
+s3_path=$(head -n 1 precompiled_s3_path)
+aws_access_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_KEY)
+aws_secret_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_SECRET_KEY)
+$BIN_DIR/fetch_precompiled "$s3_bucket" "$s3_path" "$aws_access_key" "$aws_secret_key"
+#TEMP
+mv play1 .play
+cd $BIN_DIR
+
 # create default system.properties 
 if [ ! -f ${BUILD_DIR}/system.properties ]; then
   echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
@@ -42,18 +53,11 @@ cd $BUILD_DIR
 rm -fr $PLAY_PATH/modules
 rm -fr $IVY_PATH
 
-s3_bucket=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_BUCKET)
-s3_path=$(head -n 1 precompiled_s3_path)
-aws_access_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_KEY)
-aws_secret_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_SECRET_KEY)
-
-$BIN_DIR/fetch_precompiled "$s3_bucket" "$s3_path" "$aws_access_key" "$aws_secret_key"
-#TEMP
-mv play1 .play
-
 PROFILE_PATH="$BUILD_DIR/.profile.d/play.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
+
+java 
 
 # Warn if no Procfile is present
 if [ ! -f Procfile ]; then
