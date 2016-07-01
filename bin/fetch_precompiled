@@ -60,8 +60,8 @@ auth_header="Authorization: AWS4-HMAC-SHA256 Credential=$aws_access_key/$scope, 
 echo $auth_header
 
 
-echo "-----> Downloading precompiled toastweb from $tarball_s3_path"
-curl -s ${s3_url} \
+echo "-----> Downloading precompiled toastweb from $s3_url"
+curl -s "$s3_url" \
      -H "$auth_header" \
      -H "x-amz-content-sha256: ${empty_string_sha256}" \
      -H "x-amz-date: ${timestamp}" | tar xz
