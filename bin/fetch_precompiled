@@ -14,6 +14,7 @@ function hmac_sha256 {
 
 s3_region=us-east-1
 s3_bucket="$PRECOMPILED_DOWNLOAD_BUCKET"
+s3_url="https://${s3_bucket}.s3.amazonaws.com/${s3_path}"
 aws_access_key="$PRECOMPILED_DOWNLOAD_KEY"
 aws_secret_key="$PRECOMPILED_DOWNLOAD_SECRET_KEY"
 timestamp="`date -u +'%Y%m%dT%H%M%SZ'`"
@@ -58,7 +59,9 @@ echo $request_sig
 auth_header="Authorization: AWS4-HMAC-SHA256 Credential=$aws_access_key/$scope, SignedHeaders=$header_names, Signature=$request_sig"
 echo $auth_header
 
-curl -s https://${s3_bucket}.s3.amazonaws.com/${s3_path} \
+
+echo "-----> Downloading precompiled toastweb from $tarball_s3_path"
+curl -s ${s3_url} \
      -H "$auth_header" \
      -H "x-amz-content-sha256: ${empty_string_sha256}" \
      -H "x-amz-date: ${timestamp}" | tar xz

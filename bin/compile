@@ -46,7 +46,6 @@ rm -fr $PLAY_PATH/modules
 rm -fr $IVY_PATH
 
 tarball_s3_path=$(head -n 1 precompiled_s3_path)
-echo -n "-----> Downloading precompiled toastweb from $tarball_s3_path"
 $BIN_DIR/fetch_precompiled "$tarball_s3_path"
 
 mv play1 .play
