@@ -57,8 +57,6 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/play.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 
-java 
-
 # Warn if no Procfile is present
 if [ ! -f Procfile ]; then
   echo "-----> No Procfile found. Will use the following default process: "
