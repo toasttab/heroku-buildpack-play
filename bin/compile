@@ -25,7 +25,6 @@ aws_access_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_KEY)
 aws_secret_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_SECRET_KEY)
 $BIN_DIR/fetch_precompiled "$s3_bucket" "$s3_path" "$aws_access_key" "$aws_secret_key"
 #TEMP
-mv play1 .play
 cd $BIN_DIR
 
 # create default system.properties 
