@@ -37,10 +37,6 @@ IVY_PATH=".ivy2"
 # Change dir to handle relative paths
 cd $BUILD_DIR
 
-PROFILE_PATH="$BUILD_DIR/.profile.d/play.sh"
-mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
-
 # Remove build time dependencies from slug
 # (Note: runtime modules are copied to slug with --forceCopy option)
 rm -fr $PLAY_PATH/modules
@@ -54,6 +50,10 @@ aws_secret_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_SECRET_KEY)
 $BIN_DIR/fetch_precompiled "$s3_bucket" "$s3_path" "$aws_access_key" "$aws_secret_key"
 #TEMP
 mv play1 .play
+
+PROFILE_PATH="$BUILD_DIR/.profile.d/play.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 
 # Warn if no Procfile is present
 if [ ! -f Procfile ]; then
