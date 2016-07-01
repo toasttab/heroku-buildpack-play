@@ -12,6 +12,8 @@ function hmac_sha256 {
   echo -n "$data" | openssl dgst -sha256 -mac HMAC -macopt "$key" | sed 's/^.* //'
 }
 
+echo "download bucket = $PRECOMPILED_DOWNLOAD_KEY"
+
 s3_region=us-east-1
 s3_bucket="$PRECOMPILED_DOWNLOAD_BUCKET"
 s3_url="https://${s3_bucket}.s3.amazonaws.com/${s3_path}"
