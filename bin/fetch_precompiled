@@ -72,3 +72,6 @@ echo "done, size = ${download_size}MB"
 echo -n "-----> Extracting precompiled toastweb..."
 tar -xzf "$temp_file"
 echo "done"
+
+# remove the temp file
+rm "$temp_file"
