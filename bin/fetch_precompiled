@@ -2,9 +2,11 @@
 
 # http://czak.pl/2015/09/15/s3-rest-api-with-curl.html
 
-# path to precompiled toastweb tarball is the only argument, should not start with '/'
-# e.g. should be '160630-172943-jenkins-toastweb-master-64/toastweb.tar.gz'
-s3_path=$1
+s3_bucket=$1
+# path to precompiled toastweb tarball, should not start with '/', e.g. should be '160630-172943-jenkins-toastweb-master-64/toastweb.tar.gz'
+s3_path=$2
+aws_access_key=$3
+aws_secret_key=$4
 
 function hmac_sha256 {
   key="$1"
@@ -12,13 +14,13 @@ function hmac_sha256 {
   echo -n "$data" | openssl dgst -sha256 -mac HMAC -macopt "$key" | sed 's/^.* //'
 }
 
-echo "download bucket = $PRECOMPILED_DOWNLOAD_KEY"
+echo "s3_bucket = $s3_bucket"
+echo "s3_path = $s3_path"
+echo "aws_access_key = $aws_access_key"
+echo "aws_secret_key = $aws_secret_key"
 
 s3_region=us-east-1
-s3_bucket="$PRECOMPILED_DOWNLOAD_BUCKET"
 s3_url="https://${s3_bucket}.s3.amazonaws.com/${s3_path}"
-aws_access_key="$PRECOMPILED_DOWNLOAD_KEY"
-aws_secret_key="$PRECOMPILED_DOWNLOAD_SECRET_KEY"
 timestamp="`date -u +'%Y%m%dT%H%M%SZ'`"
 yyyymmdd="`date -u +'%Y%m%d'`"
 scope="${yyyymmdd}/${s3_region}/s3/aws4_request"

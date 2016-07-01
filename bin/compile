@@ -4,6 +4,7 @@
 # Parse args
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_DIR=$3
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 
@@ -45,9 +46,13 @@ echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 rm -fr $PLAY_PATH/modules
 rm -fr $IVY_PATH
 
-tarball_s3_path=$(head -n 1 precompiled_s3_path)
-$BIN_DIR/fetch_precompiled "$tarball_s3_path"
+s3_bucket=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_BUCKET)
+s3_path=$(head -n 1 precompiled_s3_path)
+aws_access_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_KEY)
+aws_secret_key=$(cat $ENV_DIR/PRECOMPILED_DOWNLOAD_SECRET_KEY)
 
+$BIN_DIR/fetch_precompiled "$s3_bucket" "$s3_path" "$aws_access_key" "$aws_secret_key"
+#TEMP
 mv play1 .play
 
 # Warn if no Procfile is present
