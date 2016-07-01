@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# http://czak.pl/2015/09/15/s3-rest-api-with-curl.html
+
+# path to precompiled toastweb tarball is the only argument, should not start with '/'
+# e.g. should be '160630-172943-jenkins-toastweb-master-64/toastweb.tar.gz'
+s3_path=$1
+
+function hmac_sha256 {
+  key="$1"
+  data="$2"
+  echo -n "$data" | openssl dgst -sha256 -mac HMAC -macopt "$key" | sed 's/^.* //'
+}
+
+s3_region=us-east-1
+s3_bucket="$PRECOMPILED_DOWNLOAD_BUCKET"
+aws_access_key="$PRECOMPILED_DOWNLOAD_KEY"
+aws_secret_key="$PRECOMPILED_DOWNLOAD_SECRET_KEY"
+timestamp="`date -u +'%Y%m%dT%H%M%SZ'`"
+yyyymmdd="`date -u +'%Y%m%d'`"
+scope="${yyyymmdd}/${s3_region}/s3/aws4_request"
+header_names="host;x-amz-content-sha256;x-amz-date"
+empty_string_sha256="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+# canonical request
+creq="GET
+/${s3_path}
+
+host:${s3_bucket}.s3.amazonaws.com
+x-amz-content-sha256:${empty_string_sha256}
+x-amz-date:${timestamp}
+
+${header_names}
+${empty_string_sha256}"
+
+# canonical request hash
+creq_hash=$(echo -n "$creq" | openssl dgst -sha256 | sed 's/^.* //')
+echo $creq_hash
+
+# "string to sign"
+sts="AWS4-HMAC-SHA256
+${timestamp}
+${scope}
+${creq_hash}"
+
+# Four-step signing key calculation
+dateKey=$(hmac_sha256 key:"AWS4$aws_secret_key" $yyyymmdd)
+dateRegionKey=$(hmac_sha256 hexkey:$dateKey $s3_region)
+dateRegionServiceKey=$(hmac_sha256 hexkey:$dateRegionKey s3)
+signingKey=$(hmac_sha256 hexkey:$dateRegionServiceKey "aws4_request")
+echo $signingKey
+
+# request signature
+request_sig=$(echo -n "$sts" | openssl dgst -sha256 -mac HMAC -macopt hexkey:$signingKey | sed 's/^.* //')
+echo $request_sig
+
+# final Auth header
+auth_header="Authorization: AWS4-HMAC-SHA256 Credential=$aws_access_key/$scope, SignedHeaders=$header_names, Signature=$request_sig"
+echo $auth_header
+
+curl -s https://${s3_bucket}.s3.amazonaws.com/${s3_path} \
+     -H "$auth_header" \
+     -H "x-amz-content-sha256: ${empty_string_sha256}" \
+     -H "x-amz-date: ${timestamp}" | tar xz
