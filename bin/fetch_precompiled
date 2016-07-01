@@ -75,7 +75,7 @@ curl -s "$s3_url" \
 download_size=$(du -m $temp_file) 
 echo "done, size = ${download_size}MB"
 echo -n "-----> Extracting precompiled toastweb..."
-tar -xz "$temp_file"
+tar -xzf "$temp_file"
 echo "done"
 
 ls -la
