@@ -13,7 +13,7 @@ Example usage:
     $ ls
     app	conf	lib	public	test
 
-    $ heroku create --stack cedar --buildpack https://github.com/toasttab/heroku-buildpack-play.git#jcarr-precompileless-deploy
+    $ heroku create --stack cedar --buildpack https://github.com/toasttab/heroku-buildpack-play.git#precompileless-deploy
 
     $ git push heroku master
     ...
